@@ -1,24 +1,23 @@
 <html>
     <head>
         <title>Todo List for the Day</title>
+        <!--HTML is used to create visual elements, or rendering visuals-->
     </head>
 
     <body>
-        <button>Up</button> <button>Down</button>
-        <div>Wash car</div>
         <div>Practice coding</div> <!--Div tags renders invisible box around its contents-->
-        <div>Prepare for interviews</div>
-        <div>Read Lord of the Rings</div>
+
+        <input type="text" id="todo-title" />
+        <input type="date" id="date-picker"/>
+        <button onclick="addToDo()">Add New Task</button>
+
+        <div id="todo-list"></div>
 
         <script>
             console.log('Rosny');
         
             let todo1 = 99;
             console.log(typeof todo1);
-        
-            let todo2 = "Practice coding";
-            let todo3 = "Prepare for interviews";
-            let todo4 = "Read Lord of the Rings.";
         
             let month = "November";
             let dayOfMonth = "29";
@@ -28,7 +27,57 @@
             console.log(4+5*3);
             console.log((4+5)*3);
 
-            let element = document.createElement('div');
+            const todos = [
+                {
+                    title: "Practice coding",
+                    dueDate: "2022-01-25"
+                }, 
+                { 
+                    title: "Practice coding", 
+                    dueDate: "2022-03-12"
+                },
+                { 
+                    title: "Prepare for interviews", 
+                    dueDate: "2022-04-09"
+                },
+                { 
+                    title: "Read Lord of the Rings.",
+                    dueDate: "2023-05-25"
+                }, 
+                { 
+                    title: "Wash car",
+                    dueDate: "2022-12-14"
+                }
+            ];
+
+
+            render();
+            function addToDo() {
+                const textbox = document.getElementById('todo-title');
+                const taskTitle = textbox.value;
+
+                const datePicker = document.getElementById('date-picker');
+                const dueDate = datePicker.value;
+                todos.push({
+                    title: taskTitle,
+                    dueDate: dueDate
+                });
+
+                render();
+            }
+
+            function render() {
+                //reset our list
+                document.getElementById('todo-list').innerHTML = ''; //wipes the list with an empty string.
+
+                todos.forEach(function(todo) {
+                    const element = document.createElement('div');
+                    element.innerText = todo.title;
+
+                    const todoList = document.getElementById('todo-list');
+                    todoList.appendChild(element);
+                });
+            }
         
         </script>
     </body>
