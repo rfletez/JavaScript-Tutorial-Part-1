@@ -27,45 +27,108 @@
             console.log(4+5*3);
             console.log((4+5)*3);
 
-            const todos = [
-                {
-                    title: "Practice coding",
-                    dueDate: "2022-01-25"
-                }, 
-                { 
-                    title: "Practice coding", 
-                    dueDate: "2022-03-12"
-                },
-                { 
-                    title: "Prepare for interviews", 
-                    dueDate: "2022-04-09"
-                },
-                { 
-                    title: "Read Lord of the Rings.",
-                    dueDate: "2023-05-25"
-                }, 
-                { 
-                    title: "Wash car",
-                    dueDate: "2022-12-14"
-                }
-            ];
+            //Model section for MVC architecture
+            let todos;
 
+            const savedTasks = JSON.parse(localStorage.getItem('todos'));
+            //converts string to array or object
+
+            if(Array.isArray(savedTasks)) {
+                todos = savedTasks;
+            }
+            else {
+                todos = [
+                    {
+                        title: "Practice coding",
+                        dueDate: "2022-01-25",
+                        id: 'task1'
+                    }, 
+                    { 
+                        title: "Practice coding", 
+                        dueDate: "2022-03-12",
+                        id: 'task2'
+                    },
+                    { 
+                        title: "Prepare for interviews", 
+                        dueDate: "2022-04-09",
+                        id: 'task3'
+                    },
+                    { 
+                        title: "Read Lord of the Rings.",
+                        dueDate: "2023-05-25",
+                        id: 'task4'
+                    }, 
+                    { 
+                        title: "Wash car",
+                        dueDate: "2022-12-14",
+                        id: 'task5'
+                    }
+                ];
+            }
+
+            //Creates a todo
+            function createTodo(taskTitle, dueDate) {
+                const taskId = "" + new Date().getTime();
+
+                todos.push({
+                    title: taskTitle,
+                    dueDate: dueDate,
+                    id: taskId
+                });
+
+                saveToDos();
+            }
+
+            //Deletes a todo
+            function removeToDo(idToDelete) {
+                todos = todos.filter(function(todo) {
+                    //if the id of this todo matches 'idToDelete', return false
+                    //For everything else, return true
+
+                    if(todo.id === idToDelete) {
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                });
+
+                saveToDos();
+            }
+
+            function saveToDos() {
+                //run this function whenever todos change.
+                localStorage.setItem('todos', JSON.stringify(todos)); //converts array to string
+            }
+            /* ------- Model Section ends ------- */
 
             render();
+
+            //Controller section of the MVC architecture
             function addToDo() {
                 const textbox = document.getElementById('todo-title');
                 const taskTitle = textbox.value;
 
                 const datePicker = document.getElementById('date-picker');
                 const dueDate = datePicker.value;
-                todos.push({
-                    title: taskTitle,
-                    dueDate: dueDate
-                });
+
+                createTodo(taskTitle, dueDate);
 
                 render();
             }
 
+            //deleting a task from to-do list.
+            function deleteToDo(event) {
+                const deleteButton = event.target;
+                const idToDelete = deleteButton.id;
+
+                removeToDo(idToDelete);
+
+                render();
+            }
+            /* -------- Controller Section ends --------- */
+
+            //View Section of MVC architecture
             function render() {
                 //reset our list
                 document.getElementById('todo-list').innerHTML = ''; //wipes the list with an empty string.
@@ -73,6 +136,15 @@
                 todos.forEach(function(todo) {
                     const element = document.createElement('div');
                     element.innerText = todo.title;
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.innerText = 'Delete';
+                    deleteButton.style = 'margin-left: 12px;';
+                    deleteButton.onclick = deleteToDo;
+
+                    deleteButton.id = todo.id;
+
+                    element.appendChild(deleteButton);
 
                     const todoList = document.getElementById('todo-list');
                     todoList.appendChild(element);
