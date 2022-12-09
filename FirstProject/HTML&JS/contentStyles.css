@@ -83,3 +83,12 @@ body {
     color: #fff;
 }
 
+.container .box:nth-child(1) .icon {
+    /*Changes background-color when hover over the box. Only the icon*/
+    background: pink;
+}
+
+.container .box:nth-child(1) {
+    background: orange;
+    overflow: auto;
+}
